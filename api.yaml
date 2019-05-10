@@ -1,0 +1,140 @@
+swagger: '2.0'
+info:
+  description: >-
+   Bookstore...
+  version: 1.0.0
+  title: Test Bookstore
+host: localhost:8080
+basePath: /v1
+tags:
+  - name: book
+    description: Everything about Books
+schemes:
+  - http
+  
+paths:
+  '/book':
+    post:
+      tags:
+        - book
+      summary: Add a new book
+      description: ''
+      operationId: addBook
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Book that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '405':
+          description: Invalid input
+
+  '/book/{bookId}':
+    get:
+      tags:
+        - book
+      summary: Find book by ID
+      description: Returns a single book
+      operationId: getBookById
+      produces:
+        - application/json
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+    put:
+      tags:
+        - book
+      summary: Updates a book in the store with form data
+      description: ''
+      operationId: updateBook
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book that needs to be updated
+          required: true
+          type: integer
+          format: int64
+        - name: name
+          in: body
+          description: Updated name of the book
+          required: false
+          schema:
+            $ref: '#/definitions/Book'
+
+      responses:
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - book
+      summary: Deletes a book
+      description: ''
+      operationId: deleteBook
+      produces:
+        - application/json
+      parameters:
+        - name: bookId
+          in: path
+          description: Book id to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+  '/healthcheck':
+    get:
+      tags:
+        - system
+      summary: Get service healthcheck
+      description: Returns service Health
+      operationId: isHealthy
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: service OK
+        '500':
+          description: Unhealthy service
+          
+definitions:
+ 
+  Book:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: The Lord of the rings
+
+
